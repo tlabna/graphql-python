@@ -1,6 +1,7 @@
 import graphene
 
 import links.schema
+import users.schema
 
 
 # This query inherits queries from apps
@@ -10,7 +11,8 @@ class Query(links.schema.Query, graphene.ObjectType):
 
 
 # This Mutation inherits queries from apps
-class Mutation(links.schema.Mutation, graphene.ObjectType):
+class Mutation(users.schema.Mutation, links.schema.Mutation,
+               graphene.ObjectType):
     pass
 
 
