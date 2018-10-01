@@ -6,7 +6,7 @@ import users.schema
 
 # This query inherits queries from apps
 # This way you are able to keep every part of the schema isolated in apps
-class Query(links.schema.Query, graphene.ObjectType):
+class Query(users.schema.Query, links.schema.Query, graphene.ObjectType):
     pass
 
 
