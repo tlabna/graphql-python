@@ -21,19 +21,33 @@ class VoteType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    links = graphene.List(LinkType, search=graphene.String())
+    links = graphene.List(
+        LinkType,
+        search=graphene.String(),
+        first=graphene.Int(),
+        skip=graphene.Int(),
+    )
     votes = graphene.List(VoteType)
 
-    def resolve_links(self, info, search=None, **kwargs):
+    def resolve_links(self, info, search=None, first=None, skip=None,
+                      **kwargs):
+        query_search = Link.objects.all()
+
         if search:
             filter = (
                 Q(url__icontains=search) |
                 Q(description__icontains=search)
             )
 
-            return Link.objects.filter(filter)
+            return query_search.filter(filter)
 
-        return Link.objects.all()
+        if skip:
+            query_search = query_search[skip::]
+
+        if first:
+            query_search = query_search[:first]
+
+        return query_search
 
     def resolve_votes(self, info, **kwargs):
         return Vote.objects.all()
